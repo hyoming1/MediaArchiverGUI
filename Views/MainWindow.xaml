@@ -1,0 +1,142 @@
+<Window x:Class="MediaArchiver.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:MediaArchiver.ViewModels"
+        Title="📂 미디어 파일명 일괄 변경 시스템"
+        Width="820" Height="700"
+        MinWidth="680" MinHeight="540"
+        WindowStartupLocation="CenterScreen"
+        Background="{StaticResource BrBg}"
+        FontFamily="Consolas, Courier New">
+
+    <Window.DataContext>
+        <vm:MainViewModel/>
+    </Window.DataContext>
+
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Margin="0,0,0,20">
+            <TextBlock Text="미디어 파일명 일괄 변경"
+                       FontSize="22" FontWeight="Bold" Foreground="{StaticResource BrAccent}"/>
+            <TextBlock Text="사진·영상 파일의 이름을 촬영 날짜 기반으로 자동 변경합니다."
+                       FontSize="12" Foreground="{StaticResource BrTextMuted}" Margin="0,4,0,0"/>
+        </StackPanel>
+
+        <Border Grid.Row="1" Style="{StaticResource Card}" Margin="0,0,0,12">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="90"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0" Text="대상 폴더" VerticalAlignment="Center" Foreground="{StaticResource BrTextMuted}" FontSize="12"/>
+                <TextBox Grid.Column="1" IsReadOnly="True" VerticalAlignment="Center" Text="{Binding SourceDirDisplay, Mode=OneWay}"/>
+                <Button Grid.Column="2" Content="  탐색  " Style="{StaticResource BtnSecondary}" Margin="8,0,0,0" Click="BtnBrowseSource_Click"/>
+            </Grid>
+        </Border>
+
+        <Border Grid.Row="2" Style="{StaticResource Card}" Margin="0,0,0,16">
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <Ellipse Width="8" Height="8" Fill="{Binding ExifToolDotColor}" VerticalAlignment="Center" Margin="0,0,7,0"/>
+                <TextBlock Text="{Binding ExifToolStatus}" FontSize="12" Foreground="{StaticResource BrTextMuted}"/>
+            </StackPanel>
+        </Border>
+
+        <Grid Grid.Row="3" Margin="0,0,0,14">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="8"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Column="0" Text="{Binding FileCountText}" VerticalAlignment="Center" FontSize="12" Foreground="{StaticResource BrTextMuted}"/>
+            <Button Grid.Column="1" Content="▶  이름 변경 시작" Style="{StaticResource BtnPrimary}" Command="{Binding RunCommand}"/>
+            <Button Grid.Column="3" Content="■  중단" Style="{StaticResource BtnDanger}" Command="{Binding CancelCommand}"/>
+        </Grid>
+
+        <Grid Grid.Row="4" Margin="0,0,0,12">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="6"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <ProgressBar Grid.Row="0" Minimum="0" Maximum="100" Value="{Binding ProgressValue, Mode=OneWay}"/>
+            <Grid Grid.Row="2">
+                <TextBlock Text="{Binding ProgressMessage}" FontSize="11" Foreground="{StaticResource BrTextMuted}" HorizontalAlignment="Left"/>
+                <TextBlock Text="{Binding ProgressPercent}" FontSize="11" Foreground="{StaticResource BrTextMuted}" HorizontalAlignment="Right"/>
+            </Grid>
+        </Grid>
+
+        <Border Grid.Row="5" Style="{StaticResource Card}" Padding="0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Border Grid.Row="0" BorderBrush="{StaticResource BrBorder}" BorderThickness="0,0,0,1" Padding="16,10">
+                    <Grid>
+                        <TextBlock Text="LOG" FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource BrTextMuted}"/>
+                        <Button Content="지우기" Style="{StaticResource BtnGhost}" FontSize="11" HorizontalAlignment="Right" Command="{Binding ClearLogCommand}"/>
+                    </Grid>
+                </Border>
+                <ScrollViewer Grid.Row="1" x:Name="LogScroll" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Padding="16,8">
+                    <ItemsControl ItemsSource="{Binding Logs}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="0,2">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="65"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" Text="{Binding Time}" FontSize="11" Foreground="{StaticResource BrTextMuted}"/>
+                                    <TextBlock Grid.Column="1" Text="{Binding Message}" FontSize="12" Foreground="{Binding LevelBrush}" TextWrapping="Wrap"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Grid>
+        </Border>
+
+        <Border Grid.Row="6" Padding="16,10" Margin="0,12,0,0">
+            <Border.Style>
+                <Style TargetType="Border" BasedOn="{StaticResource Card}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ResultVisible}" Value="False">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
+            <StackPanel Orientation="Horizontal">
+                <StackPanel Orientation="Horizontal" Margin="0,0,24,0">
+                    <TextBlock Text="✔ 성공  " Foreground="{StaticResource BrSuccess}"/>
+                    <TextBlock Text="{Binding ResultSuccess}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,0,24,0">
+                    <TextBlock Text="⚠ 유지(수동확인)  " Foreground="{StaticResource BrWarn}"/>
+                    <TextBlock Text="{Binding ResultManual}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,0,24,0">
+                    <TextBlock Text="✖ 실패  " Foreground="{StaticResource BrError}"/>
+                    <TextBlock Text="{Binding ResultFailure}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="⏱ 소요  " Foreground="{StaticResource BrTextMuted}"/>
+                    <TextBlock Text="{Binding ResultElapsed}"/>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>

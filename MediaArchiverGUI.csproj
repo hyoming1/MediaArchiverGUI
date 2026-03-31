@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <RootNamespace>MediaArchiver</RootNamespace>
+    <AssemblyName>MediaArchiverGUI</AssemblyName>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <LangVersion>12</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- 1순위 메타데이터 추출기 (순수 .NET) -->
+    <PackageReference Include="MetadataExtractor" Version="2.8.1" />
+    <!-- 2순위 ExifTool은 외부 바이너리 직접 호출 (NuGet 없음) -->
+  </ItemGroup>
+
+	<ItemGroup>
+		<None Update="tools\**">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+
+</Project>
