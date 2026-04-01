@@ -75,7 +75,7 @@ namespace MediaArchiver.Services.Extractors
                 bool requiresKstOffset = false; // UTC로 저장된 동영상인지 확인용
 
                 string[] dateKeys = isVideo
-                    ? new[] { "MediaCreateDate", "CreateDate", "DateTimeOriginal" }
+                    ? new[] { "CreateDate", "MediaCreateDate", "DateTimeOriginal" }
                     : new[] { "DateTimeOriginal", "CreateDate" };
 
                 foreach (var key in dateKeys)

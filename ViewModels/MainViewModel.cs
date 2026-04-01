@@ -90,6 +90,13 @@ namespace MediaArchiver.ViewModels
 
         public bool CanRun => !IsRunning && !string.IsNullOrEmpty(SourceDir);
 
+        private bool _isCheckOnlyMode;
+        public bool IsCheckOnlyMode
+        {
+            get => _isCheckOnlyMode;
+            set => SetField(ref _isCheckOnlyMode, value);
+        }
+
         private bool _resultVisible;
         public bool ResultVisible
         {
@@ -160,7 +167,12 @@ namespace MediaArchiver.ViewModels
                     var locator = new WindowsExifToolLocator();
                     var metadata = new MetadataService(locator, this);
                     var naming = new NamingService();
-                    var engine = new ArchiveEngine(sourceDir, metadata, naming, this);
+
+                    // ⭐ 이 부분을 수정합니다!
+                    var engine = new ArchiveEngine(sourceDir, metadata, naming, this)
+                    {
+                        IsCheckOnlyMode = this.IsCheckOnlyMode // 체크박스 상태를 엔진에 주입
+                    };
 
                     engine.OnProgress = progress =>
                         Application.Current.Dispatcher.InvokeAsync(() => ApplyProgress(progress));

@@ -56,15 +56,19 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="16"/>
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="8"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
             <TextBlock Grid.Column="0" Text="{Binding FileCountText}" VerticalAlignment="Center" FontSize="12" Foreground="{StaticResource BrTextMuted}"/>
-            <Button Grid.Column="1" Content="▶  이름 변경 시작" Style="{StaticResource BtnPrimary}" Command="{Binding RunCommand}"/>
-            <Button Grid.Column="3" Content="■  중단" Style="{StaticResource BtnDanger}" Command="{Binding CancelCommand}"/>
-        </Grid>
 
+            <CheckBox Grid.Column="1" Content="이름 규칙 검사만 하기" IsChecked="{Binding IsCheckOnlyMode}" VerticalAlignment="Center" Foreground="{StaticResource BrText}"/>
+
+            <Button Grid.Column="3" Content="▶  시작" Style="{StaticResource BtnPrimary}" Command="{Binding RunCommand}"/>
+            <Button Grid.Column="5" Content="■  중단" Style="{StaticResource BtnDanger}" Command="{Binding CancelCommand}"/>
+        </Grid>
         <Grid Grid.Row="4" Margin="0,0,0,12">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>

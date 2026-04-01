@@ -23,6 +23,7 @@ namespace MediaArchiver.Services
                 { "sm-n960n", "GalaxyNote9" },
                 { "sm-g998n", "GalaxyS21Ultra" },
                 { "sm-s908n", "GalaxyS22Ultra" },
+                { "sm-a315n", "GalaxyA31" },
                 { "sm-a515f", "GalaxyA51" },
                 { "sm-t975n", "GalaxyTabS7Plus" },
                 { "im-a840sp", "VegaS5" },
